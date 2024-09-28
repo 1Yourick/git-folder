@@ -1,26 +1,14 @@
-# У Тимура имеется немало друзей из других городов или стран, которые часто приезжают к нему
-# в гости с целью увидеться и развлечься. Чтобы не забыть ни об одной встрече, Тимур записывает
-# имена и фамилии друзей в csv файл, дополнительно указывая для каждого дату и время встречи.
-# Вам доступен этот файл, имеющий название meetings.csv, в котором в первом столбце записана фамилия,
-# во втором — имя, в третьем — дата в формате DD.MM.YYYY , в четвертом — время в формате HH:MM:
-# Напишите программу, которая выводит фамилии и имена друзей Тимура, предварительно отсортировав
-# их по дате и времени встречи от самой ранней до самой поздней. Фамилии и имена должны быть расположены каждые на отдельной строке.
+#Реализуйте функцию get_biggest(), которая принимает один аргумент:
+#numbers — список целых неотрицательных чисел
+#Функция должна возвращать наибольшее число, которое можно составить из чисел из списка numbers. Если список numbers пуст, функция должна вернуть число -1
 
-import csv
-from datetime import datetime
-from collections import namedtuple
 
-with open('meetings.csv', encoding='utf-8') as csv_file:
-    headers = csv_file.readline()
-    rows = csv.reader(csv_file)
-    frends_list = list()
+def get_biggest(numbers):
+    if len(numbers) == 0: return -1
+    numbers =list(map(str, numbers))
+    max_len = max(map(len, numbers))
+    numbers = sorted(numbers, key = lambda x: x * max_len, reverse= True)
+    
+    return (int(''.join(numbers)))
 
-    # Friends = namedtuple('Friends', headers)
-    for row in rows:
-        d = datetime.strptime(row[2]+'_'+row[3], '%d.%m.%Y_%H:%M')
-        frends_list.append(
-            [row[0] + ' ' + row[1], d])
-
-    frends_list = sorted(frends_list, key=lambda x: x[1])
-for f in frends_list:
-    print(f[0])
+print(get_biggest([0, 0, 0, 0, 0, 0]))
