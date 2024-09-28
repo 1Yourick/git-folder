@@ -1,14 +1,31 @@
-#Реализуйте функцию get_biggest(), которая принимает один аргумент:
-#numbers — список целых неотрицательных чисел
-#Функция должна возвращать наибольшее число, которое можно составить из чисел из списка numbers. Если список numbers пуст, функция должна вернуть число -1
+# Вам доступен текстовый файл files.txt, содержащий информацию о файлах.
+# Каждая строка файла содержит три значения, разделенные символом пробела — имя файла, его размер (целое число) и единицы измерения:
+#
+# cant-help-myself.mp3 7 MB
+# keep-yourself-alive.mp3 6 MB
+# bones.mp3 5 MB
+# ...
+# Напишите программу, которая группирует данные файлы по расширению, определяя общий объем файлов каждой группы,
+# и выводит полученные группы файлов, указывая для каждой ее общий объем. Группы должны быть расположены в
+# лексикографическом порядке названий расширений, файлы в группах — в лексикографическом порядке их имен.
+from collections import defaultdict
+
+lines = defaultdict(list)
+
+with open('files.txt', 'r', encoding='utf-8') as file:
+    for line in file.readlines():
+        line = line.strip().split(' ')
+        key = (line[0].split('.')[1])  # расширение файла (.ру)
+
+        lines[key].append(line)
 
 
-def get_biggest(numbers):
-    if len(numbers) == 0: return -1
-    numbers =list(map(str, numbers))
-    max_len = max(map(len, numbers))
-    numbers = sorted(numbers, key = lambda x: x * max_len, reverse= True)
-    
-    return (int(''.join(numbers)))
 
-print(get_biggest([0, 0, 0, 0, 0, 0]))
+
+
+
+    for key in sorted(lines.keys()):
+        print(key)
+        print(lines[key])
+        print()
+#сгрупировал по расширениям, осталось найти общий объём и написать функц для перевода единиц измерения
