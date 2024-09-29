@@ -12,6 +12,21 @@ from collections import defaultdict
 
 lines = defaultdict(list)
 
+def file_size_in_bytes(value, unit):
+    value = int(value)
+    if unit == 'B':return value
+    elif unit == 'KB':return value * 1024
+    elif unit == 'MB':return value * 1024 * 1024
+    elif unit == 'GB': return value * 1024 * 1024 * 1024
+
+def hight_unit(value:int):
+    u = 0
+    u_dict = {0:'B', 1:'KB', 2:'MB', 3:'GB'}
+    while value > 1023:
+        value = value / 1024
+        u += 1
+    return round(value), u_dict[u]
+
 with open('files.txt', 'r', encoding='utf-8') as file:
     for line in file.readlines():
         line = line.strip().split(' ')
@@ -20,12 +35,13 @@ with open('files.txt', 'r', encoding='utf-8') as file:
         lines[key].append(line)
 
 
-
-
-
-
     for key in sorted(lines.keys()):
-        print(key)
-        print(lines[key])
+        file_size = 0 #bytes
+        for file in sorted(lines[key], key = lambda x: x[0]):
+            print(file[0])
+            file_size += file_size_in_bytes(file[1], file[2])
+
+        print('----------')
+        fsu = hight_unit(file_size) # 1 MB  tuple
+        print(f'Summary: {fsu[0]} {fsu[1]}')
         print()
-#сгрупировал по расширениям, осталось найти общий объём и написать функц для перевода единиц измерения
