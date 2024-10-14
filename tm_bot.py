@@ -1,6 +1,7 @@
 import telebot
 from telebot import types
-from datetime import date, timedelta, time
+from datetime import date, timedelta, datetime
+import json
 import locale
 #для перевода дней недели
 locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
@@ -32,6 +33,26 @@ def get_message(message):
     elif message.text == 'Записаться на процедуру':
         bot.send_message(message.chat.id, 'Окей, записываемся на процедуру')
         bot.send_message(message.chat.id, f'Сегодня {date.today().strftime("%d.%m.%Y %A")}')
-  
+        date_choise(message)
+
+def date_choise(message): #TODO запрашиваем дату, затем 8 кнопок с временем для записи. Открываем JSON редактируем и сохраняем.
+    bot.send_message(message.chat.id, 'Введите дату в формате ДД.ММ.ГГГГ, пример: 13.02.2024')
+
+
+
+
+#Создание JSON файла с расписанием на месяц. Словарь[дата][время] = none
+day_shedule = {'9:00':None, '10:30':None, '12:00':None, '13:30':None, '15:00':None, '16:30':None, '18:00':None, '19:30':None} #расписание на день
+month_shedule = {}
+now = datetime.now()
+for d in range(30):
+    month_shedule[(now + timedelta(days=d)).strftime(date_pattern)] = day_shedule.copy()
+
+with open ('month.json', 'w', encoding='utf-8') as file:
+    json.dump(month_shedule, file)
+#Конец создания json
+
+
+
 
 bot.polling(non_stop=True)
