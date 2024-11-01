@@ -12,11 +12,15 @@ bot = telebot.TeleBot(token)
 
 START_MESSAGE = '''Text. Bot description.
 Hello, I`m bot. I will help you to do something'''
-#получаем расписание на конкретный день
-def get_day_schedule(cur_date:str) -> dict[str, None]:
+
+#получаем расписание на конкретный день если day = true или список ближайших дат
+def get_schedule(cur_date:str = None, day = True):
     with open ('month.json', 'r', encoding='utf-8') as file:
         json_dict = json.load(file)
-        return json_dict[cur_date]
+        if day:
+            return json_dict[cur_date]
+        else:
+            return list(json_dict.keys())
 #возвращаем список свободных окошек в определённый день
 def free_time(schedule: dict[str, None]) -> list[str]:
     return [k for k,v in schedule.items() if v == None]
@@ -27,11 +31,13 @@ def is_correct_date(s:str) -> str:
     try:
         inputed_date = datetime.strptime(s, date_pattern)
         if datetime.now() <= inputed_date <= datetime.now() + timedelta(days=31):
-            return 'Correct'
+            return True
         else:
-            return 'Diaposon'
+            return False
     except:
-        return 'Uncorrect'
+        return False
+def is_correct_time(message):
+    pass
     
 #Стартовое сообщение
 @bot.message_handler(commands=['start', 'help'])
@@ -58,30 +64,29 @@ def get_message(message):
         bot.send_message(message.chat.id, 'Окей, записываемся на процедуру')
         bot.send_message(message.chat.id, f'Сегодня {date.today().strftime("%d.%m.%Y %A")}')
         date_choise(message)
-    #Прислали дату
-    elif t := is_correct_date(message.text):
-        cur_date = message.text
-        bot.send_message(message.chat.id, t)
-        if t == 'Correct':
-            if add:
-                add = False
-                time_list = free_time(get_day_schedule(cur_date)) # получаем список свободного времени в введённое время
-                markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
-                for i in range(len(time_list)): #создаём кнопки со свободным временем
-                    btn = types.KeyboardButton(time_list[i])
-                    markup.add(btn)
-                bot.send_message(message.chat.id, 'Выберите время', reply_markup=markup)
-                #тут мы уже знаем корректную дату и юзер тыкает на определённое время на которое хочет записаться
-                #TODO сделать запись по времени с сохранением в JSON
-            else:
-                pass # просмотр свободных мест
-        elif t == 'Diaposon':
-            pass
-        elif t == 'Uncorrect':
-            pass
+    elif is_correct_date(message.text):
+        time_choise(message)
+    elif is_correct_time:
+        pass #TODO запись в JSON
 
-def date_choise(message): #TODO запрашиваем дату, затем 8 кнопок с временем для записи. Открываем JSON редактируем и сохраняем.
-    bot.send_message(message.chat.id, 'Введите дату в формате ДД.ММ.ГГГГ, пример: 13.02.2024')
+
+def date_choise(message):
+    near_dates = get_schedule(day=False)
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    print(near_dates)
+    for i in range(len(near_dates)):
+        btn = types.KeyboardButton(near_dates[i])
+        markup.add(btn)
+    bot.send_message(message.chat.id, 'Введите дату в формате ДД.ММ.ГГГГ, пример: 13.02.2024\nИли выбирете дату из списка', reply_markup=markup)
+
+def time_choise(message):
+    cur_date = message.text
+    time_list = free_time(get_schedule(cur_date)) # получаем список свободного времени в введённое время
+    markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+    for i in range(len(time_list)): #создаём кнопки со свободным временем
+        btn = types.KeyboardButton(time_list[i])
+        markup.add(btn)
+    bot.send_message(message.chat.id, 'Выберите время', reply_markup=markup)
 
 
 bot.polling(non_stop=True)
