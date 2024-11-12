@@ -40,6 +40,22 @@ def is_correct_date(s:str) -> str:
 def is_correct_time(time):
     return True if  time in ['9:00', '10:30', '12:00', '13:30', '15:00', '16:30', '18:00', '19:30'] else False
 
+#создание текста для просмотра свободных окошек
+def create_text_to_view_available():
+    with open ('month.json', 'r', encoding='utf-8') as file: #открыли старый JSON
+        json_dict = json.load(file)
+    text =''
+    for date, date_values in json_dict.items():
+        text += f'\n📆{date}'
+        for time, value in date_values.items():
+            text += f'\n    🕘 {time}'
+            if value:
+                text += ' ❌ '
+            else:
+                text += ' ✅ '
+        text+='\n'
+    return text
+
     
 #Стартовое сообщение
 @bot.message_handler(commands=['start', 'help'])
@@ -61,8 +77,11 @@ def get_message(message):
     global inputed_datetime
     if message.text == 'Свободные окошки':
         add = False
-        bot.send_message(message.chat.id, 'Скоро') 
-        print(message) 
+        text = create_text_to_view_available()
+        markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
+        btn = types.KeyboardButton('Спасибо')
+        markup.add(btn)
+        bot.send_message(message.chat.id, text, reply_markup=markup)
     elif message.text == 'Записаться на процедуру':
         add = True
         inputed_datetime.clear()
