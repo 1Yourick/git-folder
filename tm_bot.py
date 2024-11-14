@@ -3,6 +3,12 @@ from telebot import types
 from datetime import date, timedelta, datetime
 import json
 import locale
+
+#TODO обновлять json каждый день. Убирать вчерашний день и добавлять который будет через 30 дней.
+#TODO Выходные и праздники.
+#TODO бот для администратора в котором и будет создаваться json
+
+
 #для перевода дней недели
 locale.setlocale(locale.LC_ALL, 'ru_RU.UTF-8')
 date_pattern = "%d.%m.%Y"
@@ -58,7 +64,7 @@ def create_text_to_view_available():
 
     
 #Стартовое сообщение
-@bot.message_handler(commands=['start', 'help'])
+@bot.message_handler(commands=['start', 'help', 'Спасибо', 'В начало'])
 def main(message):
     
     markup = types.ReplyKeyboardMarkup(resize_keyboard=True)
