@@ -1,1 +1,16 @@
-{"Andrei": {}, "Lora": {}, "Piter Robbinson": {}, "Dasha balsa": {}}
+{
+    "Andrei": {
+        "lessons": {
+            "Tourism": {
+                "retries": 5,
+                "result": true,
+                "dict": {
+                    "Car": "Машина"
+                }
+            }
+        }
+    },
+    "Lora": {},
+    "Piter Robbinson": {},
+    "Dasha balsa": {}
+}

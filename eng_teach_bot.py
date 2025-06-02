@@ -48,15 +48,24 @@ def first_buttons(message):
     markup.add(btn2)
 
     bot.send_message(message.chat.id,text = msg_hello_message, reply_markup=markup)
+#func for adding new words
+@bot.message_handler(func=lambda message: states.get(message.chat.id) == "add words", content_types=['text'])
+def add_new_words():
+    pass
 
 # two func for show students
 @bot.message_handler(func=lambda message: states.get(message.chat.id) == "student list", content_types=['text'])
 def show_students(message):
     json_dict = open_json()
     if message.text == 'Add lesson':
-        pass
+        bot.send_message(message.chat.id, 'Write lesson name\nExample: Tourism')
+        add_new_words()
+        #TODO отдельная функция для добавления слов
+        states[message.chat.id] = 'add words'
+        
     elif message.text == 'Remove lesson':
         pass
+    #TODO remove old lessons
     elif message.text not in json_dict.keys():
         states[message.chat.id] = 'auth_done'
         bot.send_message(message.chat.id, 'Student not found')
