@@ -1,16 +1,1 @@
-{
-    "Andrei": {
-        "lessons": {
-            "Tourism": {
-                "retries": 5,
-                "result": true,
-                "dict": {
-                    "Car": "Машина"
-                }
-            }
-        }
-    },
-    "Lora": {},
-    "Piter Robbinson": {},
-    "Dasha balsa": {}
-}
+{"Andrei": {"lessons": {"Tourism": {"result": [], "dict": {"Car": "Машина"}}, "cartoons": {"result": [], "dict": {"Bunny": "кролик", "Hedgehog": "Ёжик"}}, "bla": {"result": [], "dict": {"bla": "bla", "bla1": "bla"}}}}, "Petya": {"lessons": {"lol": {"result": [], "dict": {}}, "Homework": {"result": [], "dict": {"Room": "комната", "Kitchen": "Кухня", "Door": "Дверь"}}}}, "Galya": {"lessons": {}}, "Sophia Rataru": {"lessons": {"trip": {"result": [], "dict": {"car": "тачка", "visa": "виза"}}}}, "John Wick": {"lessons": {"Love": {"result": [], "dict": {"Dog": "собака", "Kill": "убивать", "love": "Любовь"}}}}}
